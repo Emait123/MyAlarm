@@ -24,7 +24,7 @@ public class AlarmHelper extends SQLiteOpenHelper {
     public void createTable() {
         Cursor cursor = readDB.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='tbl_alarm'", null);
         if (cursor.getCount() == 0) {
-            writeDB.execSQL("CREATE TABLE IF NOT EXISTS tbl_alarm(_id INTEGER PRIMARY KEY, hour NVARCHAR(2), minute NVARCHAR(2), message NVARCHAR(50))");
+            writeDB.execSQL("CREATE TABLE IF NOT EXISTS tbl_alarm(_id INTEGER PRIMARY KEY, hour NVARCHAR(2), minute NVARCHAR(2), message NVARCHAR(50), active INTEGER DEFAULT 1)");
         }
         cursor.close();
     }
@@ -45,6 +45,26 @@ public class AlarmHelper extends SQLiteOpenHelper {
 
     public Cursor getAlarmList() {
         return readDB.rawQuery("SELECT * FROM tbl_alarm ORDER BY hour ASC, minute ASC", null);
+    }
+
+    public Cursor getAlarm(int id) {
+        return readDB.rawQuery("SELECT * FROM tbl_alarm WHERE _id = " + id, null);
+    }
+
+    public void changeAlarm(int id, String hour, String minute, String mes){
+        writeDB.execSQL("UPDATE tbl_alarm SET hour = ?, minute = ?, message = ? WHERE _id = " + id, new String[]{hour, minute, mes});
+    }
+
+    public void deleteAlarm(int id){
+        writeDB.execSQL("DELETE FROM tbl_alarm WHERE _id = " + id);
+    }
+
+    public void turnOnAlarm(int id) {
+        writeDB.execSQL("UPDATE tbl_alarm SET active = 1 WHERE _id = " + id);
+    }
+
+    public void turnOffAlarm(int id) {
+        writeDB.execSQL("UPDATE tbl_alarm SET active = 0 WHERE _id = " + id);
     }
 
     @Override

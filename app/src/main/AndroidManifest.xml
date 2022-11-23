@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:allowBackup="true"
@@ -18,19 +18,32 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MyAlarm"
         tools:targetApi="31">
+
+        <receiver android:name=".MyReceiver" />
         <activity
-            android:name=".AlarmScreenActivity"
-            android:exported="false"
-            android:excludeFromRecents="true"
-            android:showOnLockScreen="true"
-            android:showWhenLocked="true"
-            android:turnScreenOn="true"
-            android:showForAllUsers="true">
+            android:parentActivityName=".MainActivity"
+            android:label="Sửa báo thức"
+            android:name=".ChangeAlarmActivity"
+            android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
+            android:name=".AlarmScreenActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:showForAllUsers="true"
+            android:showOnLockScreen="true"
+            android:showWhenLocked="true"
+            android:turnScreenOn="true">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:label="Thêm báo thức"
+            android:parentActivityName=".MainActivity"
             android:name=".AddAlarmActivity"
             android:exported="false">
             <meta-data
@@ -38,6 +51,7 @@
                 android:value="" />
         </activity>
         <activity
+            android:label="Báo thức"
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
@@ -50,8 +64,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
-        <receiver android:name=".MyReceiver" />
     </application>
 
 </manifest>

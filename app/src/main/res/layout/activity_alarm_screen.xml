@@ -7,10 +7,25 @@
     tools:context=".AlarmScreenActivity">
 
     <TextView
-        android:id="@+id/requestId"
+        android:id="@+id/alarmTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        />
+        android:textSize="60sp"
+        android:textAllCaps="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/alarmMes"/>
+
+    <TextView
+        android:id="@+id/alarmMes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        app:layout_constraintTop_toBottomOf="@id/alarmTime"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/dismissBtn"/>
 
     <Button
         android:id="@+id/dismissBtn"

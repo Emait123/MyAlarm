@@ -47,10 +47,10 @@ public class AddAlarmActivity extends AppCompatActivity implements View.OnClickL
         int id = Integer.parseInt(sId);
 
         edit.setText(sId);
-        /*db.addAlarm(id, sHour, sMin, message);
+        db.addAlarm(id, sHour, sMin, message);
 
         Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);*/
+        startActivity(intent);
     }
 
     public String fixNum(int num) {

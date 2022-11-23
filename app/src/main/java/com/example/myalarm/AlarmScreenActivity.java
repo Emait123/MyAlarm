@@ -7,8 +7,10 @@ import android.app.KeyguardManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -19,27 +21,35 @@ public class AlarmScreenActivity extends AppCompatActivity implements View.OnCli
 
     Button btn;
     int id;
+    String message;
+    MediaPlayer player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_alarm_screen);
 
+        player = MediaPlayer.create(this, Settings.System.DEFAULT_RINGTONE_URI);
+        player.start();
+
         btn = findViewById(R.id.dismissBtn);
 
         id = getIntent().getIntExtra("id", 1);
-        TextView a = findViewById(R.id.requestId);
+        message = getIntent().getStringExtra("mes");
+        TextView time = findViewById(R.id.alarmTime);
+        TextView mes = findViewById(R.id.alarmMes);
+        mes.setText(message);
 
         btn.setOnClickListener(this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
-            setShowWhenLocked(true);
-            setTurnScreenOn(true);
-            KeyguardManager keyManager = (KeyguardManager) getSystemService(this.KEYGUARD_SERVICE);
-            keyManager.requestDismissKeyguard(this, null);
-        } else {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
+//            setShowWhenLocked(true);
+//            setTurnScreenOn(true);
+//            KeyguardManager keyManager = (KeyguardManager) getSystemService(this.KEYGUARD_SERVICE);
+//            keyManager.requestDismissKeyguard(this, null);
+//        } else {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        }
+        //}
     }
 
     @Override
@@ -48,13 +58,17 @@ public class AlarmScreenActivity extends AppCompatActivity implements View.OnCli
         Log.e("lastId", idText);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent myIntent = new Intent(this, MyReceiver.class);
-        myIntent.putExtra("action", "end");
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), id, myIntent, PendingIntent.FLAG_NO_CREATE);
+        Intent intent = new Intent(this, MyReceiver.class);
+        intent.putExtra("id", id);
+        intent.putExtra("action", "start");
+        intent.putExtra("mes", message);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, intent, 0);
         if (pendingIntent != null) {
             alarmManager.cancel(pendingIntent);
             pendingIntent.cancel();
+            player.stop();
+            player.release();
+            finish();
         }
-        finish();
     }
 }
