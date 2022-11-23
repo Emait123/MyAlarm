@@ -42,8 +42,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         alarmList = db.getAlarmList();
         while (alarmList.moveToNext()) {
             int id = alarmList.getInt(0);
-            int hour = alarmList.getInt(1);
-            int minute = alarmList.getInt(2);
+            String sHour = alarmList.getString(1);
+            String sMinute = alarmList.getString(2);
+
+            int hour = Integer.parseInt(sHour);
+            int minute = Integer.parseInt(sMin);
 
             Calendar curTime = Calendar.getInstance();
 
@@ -55,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (calendar.compareTo(curTime) > 0) {
                 Intent broadcast = new Intent(this, MyReceiver.class);
                 broadcast.putExtra("id", id);
+                broadcast.putExtra("action", "start");
                 String idtxt = Integer.toString(id);
                 Log.e("startId", idtxt);
                 PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, broadcast, PendingIntent.FLAG_UPDATE_CURRENT);

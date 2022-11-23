@@ -24,7 +24,7 @@ public class AlarmHelper extends SQLiteOpenHelper {
     public void createTable() {
         Cursor cursor = readDB.rawQuery("SELECT name FROM sqlite_master WHERE type='table' AND name='tbl_alarm'", null);
         if (cursor.getCount() == 0) {
-            writeDB.execSQL("CREATE TABLE IF NOT EXISTS tbl_alarm(_id INTEGER PRIMARY KEY AUTOINCREMENT, hour INTEGER, minute INTEGER, message NVARCHAR(50))");
+            writeDB.execSQL("CREATE TABLE IF NOT EXISTS tbl_alarm(_id INTEGER PRIMARY KEY, hour NVARCHAR(2), minute NVARCHAR(2), message NVARCHAR(50))");
         }
         cursor.close();
     }
@@ -39,8 +39,8 @@ public class AlarmHelper extends SQLiteOpenHelper {
         return db.rawQuery(query, null);
     }
 
-    public void addAlarm(int hour, int minute, String message) {
-        writeDB.execSQL("INSERT INTO tbl_alarm(hour, minute, message) VALUES(" + hour + ", " + minute + ", '" + message + "')");
+    public void addAlarm(int id, String hour, String minute, String message) {
+        writeDB.execSQL("INSERT INTO tbl_alarm(_id, hour, minute, message) VALUES(" + id + ", ?, ?, ?)", new String[] {hour, minute, message});
     }
 
     public Cursor getAlarmList() {

@@ -38,7 +38,7 @@ public class AlarmScreenActivity extends AppCompatActivity implements View.OnCli
             KeyguardManager keyManager = (KeyguardManager) getSystemService(this.KEYGUARD_SERVICE);
             keyManager.requestDismissKeyguard(this, null);
         } else {
-            getWindow().addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         }
     }
 
@@ -46,11 +46,11 @@ public class AlarmScreenActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View view) {
         String idText = Integer.toString(id);
         Log.e("lastId", idText);
+
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent myIntent = new Intent(this, MyReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                getApplicationContext(), id, myIntent,
-                PendingIntent.FLAG_NO_CREATE);
+        myIntent.putExtra("action", "end");
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), id, myIntent, PendingIntent.FLAG_NO_CREATE);
         if (pendingIntent != null) {
             alarmManager.cancel(pendingIntent);
             pendingIntent.cancel();

@@ -14,18 +14,28 @@ public class MyReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        int id = intent.getIntExtra("id", -1);
-        if (id != -1) {
-            String idText = Integer.toString(id);
-            Log.e("Id", idText);
+        player = MediaPlayer.create(context, Settings.System.DEFAULT_RINGTONE_URI);
+        String action = intent.getString("action");
+        switch (action) {
+            case "start":
+                int id = intent.getIntExtra("id", -1);
+                if (id != -1) {
+                    String idText = Integer.toString(id);
+                    Log.e("Id", idText);
 
-            player = MediaPlayer.create(context, Settings.System.DEFAULT_RINGTONE_URI);
-            player.start();
+                    player = MediaPlayer.create(context, Settings.System.DEFAULT_RINGTONE_URI);
+                    player.start();
 
-            Intent alarm = new Intent(context, AlarmScreenActivity.class);
-            alarm.putExtra("id", id);
-            alarm.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(alarm);
+                    Intent alarm = new Intent(context, AlarmScreenActivity.class);
+                    alarm.putExtra("id", id);
+                    alarm.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(alarm);
+                }
+                break;
+            case "end":
+                player.stop();
+                break;
         }
+
     }
 }

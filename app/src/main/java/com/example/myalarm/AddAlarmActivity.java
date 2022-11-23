@@ -27,10 +27,11 @@ public class AddAlarmActivity extends AppCompatActivity implements View.OnClickL
 
         db = new AlarmHelper(this);
         picker = findViewById(R.id.timePicker);
+        manager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
         picker.setIs24HourView(true);
         FloatingActionButton btn = findViewById(R.id.setAlarm);
         btn.setOnClickListener(this);
-        manager = (AlarmManager) getSystemService(ALARM_SERVICE);
     }
 
     @Override
@@ -39,22 +40,25 @@ public class AddAlarmActivity extends AppCompatActivity implements View.OnClickL
         int minute = picker.getMinute();
         EditText edit = findViewById(R.id.message);
         String message = edit.getText().toString();
-        db.addAlarm(hour, minute, message);
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, minute);
+        String sHour = fixNum(hour);
+        String sMin = fixNum(minute);
+        String sId = sHour.concat(sMin);
+        int id = Integer.parseInt(sId);
 
-        String time = Integer.toString(hour).concat(Integer.toString(minute));
-        int requestCode = Integer.parseInt(time);
-
-        Intent broadcast = new Intent(this, MyReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, requestCode, broadcast, PendingIntent.FLAG_UPDATE_CURRENT);
-        manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-
+        edit.setText(sId);
+        /*db.addAlarm(id, sHour, sMin, message);
 
         Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
+        startActivity(intent);*/
+    }
+
+    public String fixNum(int num) {
+        String result = Integer.toString(num);
+        if (num < 9) {
+            String zero = "0";
+            result = zero.concat(result);
+        }
+        return result;
     }
 }
