@@ -54,8 +54,8 @@ public class ChangeAlarmActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.editBtn:
-                String hour = Integer.toString(picker.getHour());
-                String minute = Integer.toString(picker.getMinute());
+                String hour = fixNum(picker.getHour());
+                String minute = fixNum(picker.getMinute());
                 String message = mes.getText().toString();
                 db.changeAlarm(id, hour, minute, message);
                 break;
@@ -66,5 +66,14 @@ public class ChangeAlarmActivity extends AppCompatActivity implements View.OnCli
         }
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    public String fixNum(int num) {
+        String result = Integer.toString(num);
+        if (num <= 9) {
+            String zero = "0";
+            result = zero.concat(result);
+        }
+        return result;
     }
 }

@@ -55,7 +55,7 @@ public class AddAlarmActivity extends AppCompatActivity implements View.OnClickL
 
     public String fixNum(int num) {
         String result = Integer.toString(num);
-        if (num < 9) {
+        if (num <= 9) {
             String zero = "0";
             result = zero.concat(result);
         }
