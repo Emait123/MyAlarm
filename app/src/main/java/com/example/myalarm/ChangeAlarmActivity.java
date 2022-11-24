@@ -4,13 +4,11 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 public class ChangeAlarmActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -28,10 +26,8 @@ public class ChangeAlarmActivity extends AppCompatActivity implements View.OnCli
         picker = findViewById(R.id.timePicker);
         picker.setIs24HourView(true);
         mes = findViewById(R.id.mess);
-
         id = getIntent().getIntExtra("id", -1);
 
-        //Toast.makeText(this, Integer.toString(id), Toast.LENGTH_SHORT).show();
         if (id != -1) {
             Cursor c = db.getAlarm(id);
             c.moveToFirst();
@@ -52,17 +48,14 @@ public class ChangeAlarmActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.editBtn:
-                String hour = fixNum(picker.getHour());
-                String minute = fixNum(picker.getMinute());
-                String message = mes.getText().toString();
-                db.changeAlarm(id, hour, minute, message);
-                break;
-            case R.id.deleteBtn:
-                db.deleteAlarm(id);
-                break;
-            default:
+        if (view.getId() == R.id.editBtn){
+            String hour = fixNum(picker.getHour());
+            String minute = fixNum(picker.getMinute());
+            String message = mes.getText().toString();
+            int newID = Integer.parseInt(hour.concat(minute));
+            db.changeAlarm(id, newID, hour, minute, message);
+        } else {
+            db.deleteAlarm(id);
         }
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

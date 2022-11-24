@@ -1,14 +1,9 @@
 package com.example.myalarm;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.media.MediaPlayer;
-import android.provider.Settings;
 import android.util.Log;
-import android.widget.Toast;
 
 public class MyReceiver extends BroadcastReceiver {
     @Override

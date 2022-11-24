@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">My Alarm</string>
+    <string name="delete_alarm">Xóa báo thức</string>
+    <string name="edit_alarm">Sửa báo thức</string>
+    <string name="message_hint">Lời nhắn</string>
+    <string name="turnOff_alarm">Tắt chuông báo</string>
 </resources>

@@ -21,9 +21,9 @@
 
         <receiver android:name=".MyReceiver" />
         <activity
+            android:name=".ChangeAlarmActivity"
             android:parentActivityName=".MainActivity"
             android:label="Sửa báo thức"
-            android:name=".ChangeAlarmActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -42,17 +42,17 @@
                 android:value="" />
         </activity>
         <activity
+            android:name=".AddAlarmActivity"
             android:label="Thêm báo thức"
             android:parentActivityName=".MainActivity"
-            android:name=".AddAlarmActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:label="Báo thức"
             android:name=".MainActivity"
+            android:label="Báo thức"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

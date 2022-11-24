@@ -9,7 +9,6 @@ import androidx.annotation.Nullable;
 
 public class AlarmHelper extends SQLiteOpenHelper {
 
-    private Context context;
     private static final String DATABASE_NAME = "Alarm.db";
     private static final int DATABASE_VERSION = 1;
     private SQLiteDatabase readDB;
@@ -40,7 +39,12 @@ public class AlarmHelper extends SQLiteOpenHelper {
     }
 
     public void addAlarm(int id, String hour, String minute, String message) {
+        Cursor cursor = readDB.rawQuery("SELECT _id FROM tbl_alarm WHERE _id = " + id, null);
+        if (cursor.getCount() > 0) {
+            writeDB.execSQL("DELETE FROM tbl_alarm WHERE _id = " + id);
+        }
         writeDB.execSQL("INSERT INTO tbl_alarm(_id, hour, minute, message) VALUES(" + id + ", ?, ?, ?)", new String[] {hour, minute, message});
+        cursor.close();
     }
 
     public Cursor getAlarmList() {
@@ -51,8 +55,9 @@ public class AlarmHelper extends SQLiteOpenHelper {
         return readDB.rawQuery("SELECT * FROM tbl_alarm WHERE _id = " + id, null);
     }
 
-    public void changeAlarm(int id, String hour, String minute, String mes){
-        writeDB.execSQL("UPDATE tbl_alarm SET hour = ?, minute = ?, message = ? WHERE _id = " + id, new String[]{hour, minute, mes});
+    public void changeAlarm(int oldID, int newID, String hour, String minute, String message){
+        writeDB.execSQL("DELETE FROM tbl_alarm WHERE _id = " + oldID);
+        writeDB.execSQL("INSERT INTO tbl_alarm(_id, hour, minute, message) VALUES(" + newID + ", ?, ?, ?)", new String[] {hour, minute, message});
     }
 
     public void deleteAlarm(int id){
@@ -65,6 +70,11 @@ public class AlarmHelper extends SQLiteOpenHelper {
 
     public void turnOffAlarm(int id) {
         writeDB.execSQL("UPDATE tbl_alarm SET active = 0 WHERE _id = " + id);
+    }
+
+    public void stop(){
+        writeDB.close();
+        readDB.close();
     }
 
     @Override

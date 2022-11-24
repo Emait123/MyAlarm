@@ -2,8 +2,6 @@ package com.example.myalarm;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,13 +10,10 @@ import android.widget.TimePicker;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.Calendar;
-
 public class AddAlarmActivity extends AppCompatActivity implements View.OnClickListener {
 
     TimePicker picker;
     AlarmHelper db;
-    AlarmManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +22,6 @@ public class AddAlarmActivity extends AppCompatActivity implements View.OnClickL
 
         db = new AlarmHelper(this);
         picker = findViewById(R.id.timePicker);
-        manager = (AlarmManager) getSystemService(ALARM_SERVICE);
 
         picker.setIs24HourView(true);
         FloatingActionButton btn = findViewById(R.id.setAlarm);
@@ -46,7 +40,6 @@ public class AddAlarmActivity extends AppCompatActivity implements View.OnClickL
         String sId = sHour.concat(sMin);
         int id = Integer.parseInt(sId);
 
-        edit.setText(sId);
         db.addAlarm(id, sHour, sMin, message);
 
         Intent intent = new Intent(this, MainActivity.class);

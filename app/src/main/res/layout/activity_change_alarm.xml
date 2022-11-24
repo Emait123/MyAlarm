@@ -10,7 +10,9 @@
         android:id="@+id/mess"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Lời nhắn"
+        android:hint="@string/message_hint"
+        android:importantForAutofill="no"
+        android:inputType="text"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -30,7 +32,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:text="Xóa báo thức"
+        android:text="@string/delete_alarm"
         app:layout_constraintRight_toLeftOf="@id/guideline2"
         app:layout_constraintTop_toBottomOf="@id/timePicker"
         app:layout_constraintBottom_toBottomOf="parent"/>
@@ -39,7 +41,7 @@
         android:id="@+id/editBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Sửa báo thức"
+        android:text="@string/edit_alarm"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toRightOf="@id/guideline2"
         app:layout_constraintTop_toBottomOf="@id/timePicker"
@@ -50,7 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        app:layout_constraintGuide_begin="201dp" />
+        app:layout_constraintGuide_percent="0.5"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

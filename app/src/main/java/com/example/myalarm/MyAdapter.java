@@ -23,14 +23,15 @@ import java.util.Calendar;
 public class MyAdapter extends CursorAdapter {
     AlarmHelper db;
     AlarmManager manager;
-    Cursor cursor;
     RefreshActivity refresher;
+    //private Context context;
 
     public MyAdapter(Context context, Cursor c) {
         super(context, c, 0);
         db = new AlarmHelper(context);
         manager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         refresher = (RefreshActivity) context;
+        //this.context = context;
     }
 
     @Override
@@ -49,19 +50,20 @@ public class MyAdapter extends CursorAdapter {
 
         SwitchMaterial alarmSwitch = view.findViewById(R.id.alarmSwitch);
         int check = cursor.getInt(cursor.getColumnIndexOrThrow("active"));
-        alarmSwitch.setChecked(check == 1);
         if (check == 1) {
-            //alarmSwitch.setChecked(true);
+            //Bật báo thức nếu active
+            alarmSwitch.setChecked(true);
             int iHour = Integer.parseInt(hour);
             int iMinute = Integer.parseInt(minute);
             String message = cursor.getString(3);
 
-            long alarm = 0;
+            long alarm;
             Calendar alarmTime = Calendar.getInstance();
             alarmTime.setTimeInMillis(System.currentTimeMillis());
             alarmTime.set(Calendar.HOUR_OF_DAY, iHour);
             alarmTime.set(Calendar.MINUTE, iMinute);
             alarmTime.set(Calendar.SECOND, 0);
+            alarmTime.set(Calendar.MILLISECOND, 0);
 
             Calendar curTime = Calendar.getInstance();
             if (alarmTime.getTimeInMillis() <= curTime.getTimeInMillis()){
@@ -78,6 +80,18 @@ public class MyAdapter extends CursorAdapter {
 
             String idTxt = Integer.toString(id);
             Log.e("active alarm:", idTxt);
+        } else {
+            //Tắt báo thức nếu inactive
+            alarmSwitch.setChecked(false);
+            String message = cursor.getString(3);
+            Intent intent = new Intent(context, MyReceiver.class);
+            intent.putExtra("id", id);
+            intent.putExtra("mes", message);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
+            if (pendingIntent != null) {
+                manager.cancel(pendingIntent);
+                pendingIntent.cancel();
+            }
         }
 
         alarmSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -92,7 +106,11 @@ public class MyAdapter extends CursorAdapter {
                     Toast.makeText(context, "Đã tắt báo thức", Toast.LENGTH_SHORT).show();
                     //notifyDataSetChanged();
                 }
-                refresher.refresh();
+                //Gọi function trong MainActivity để load lại cursor và Listview
+                if (context instanceof MainActivity){
+                    ((MainActivity)context).notifyRefresh();
+                }
+                //refresher.refresh();
             }
         });
     }

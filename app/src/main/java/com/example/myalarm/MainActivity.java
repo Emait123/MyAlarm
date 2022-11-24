@@ -2,26 +2,19 @@ package com.example.myalarm;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, RefreshActivity {
 
     AlarmHelper db;
     ListView list;
-    AlarmManager manager;
     MyAdapter adapter;
 
     @Override
@@ -32,7 +25,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         db = new AlarmHelper(this);
         FloatingActionButton btn = findViewById(R.id.addAlarm);
         btn.setOnClickListener(this);
-        //manager = (AlarmManager) getSystemService(ALARM_SERVICE);
+
         //db.makeQuery("DROP TABLE IF EXISTS tbl_alarm");
 
         db.createTable();
@@ -61,46 +54,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(intent);
     }
 
-    public void setAlarm() {
-        Cursor list = db.getAlarmList();
-        while (list.moveToNext()) {
-            int id = list.getInt(0);
-            String sHour = list.getString(1);
-            String sMinute = list.getString(2);
-            int active = list.getInt(3);
-
-            if (active == 1){
-                int hour = Integer.parseInt(sHour);
-                int minute = Integer.parseInt(sMinute);
-
-                Calendar curTime = Calendar.getInstance();
-
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTimeInMillis(System.currentTimeMillis());
-                calendar.set(Calendar.HOUR_OF_DAY, hour);
-                calendar.set(Calendar.MINUTE, minute);
-                calendar.set(Calendar.SECOND, 0);
-
-                String message = list.getString(3);
-
-                Intent intent = new Intent(this, MyReceiver.class);
-                intent.putExtra("id", id);
-                intent.putExtra("action", "start");
-                intent.putExtra("mes", message);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, id, intent, 0);
-                manager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-
-                String idTxt = Integer.toString(id);
-                Log.e("startId", idTxt);
-            }
-            //if (calendar.compareTo(curTime) > 0) {
-            //}
-        }
-    }
-
     @Override
     public void refresh() {
         finish();
         startActivity(getIntent());
+    }
+
+    public void notifyRefresh(){
+        Cursor cursor = db.getAlarmList();
+        adapter.changeCursor(cursor);
     }
 }
