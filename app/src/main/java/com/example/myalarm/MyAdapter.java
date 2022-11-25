@@ -24,14 +24,12 @@ public class MyAdapter extends CursorAdapter {
     AlarmHelper db;
     AlarmManager manager;
     RefreshActivity refresher;
-    //private Context context;
 
     public MyAdapter(Context context, Cursor c) {
         super(context, c, 0);
         db = new AlarmHelper(context);
         manager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         refresher = (RefreshActivity) context;
-        //this.context = context;
     }
 
     @Override
@@ -78,8 +76,7 @@ public class MyAdapter extends CursorAdapter {
             PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, intent, 0);
             manager.set(AlarmManager.RTC_WAKEUP, alarm, pendingIntent);
 
-            String idTxt = Integer.toString(id);
-            Log.e("active alarm:", idTxt);
+            Log.e("Active alarm:", Integer.toString(id));
         } else {
             //Tắt báo thức nếu inactive
             alarmSwitch.setChecked(false);
@@ -92,6 +89,7 @@ public class MyAdapter extends CursorAdapter {
                 manager.cancel(pendingIntent);
                 pendingIntent.cancel();
             }
+            Log.e("Nonactive alarm:", Integer.toString(id));
         }
 
         alarmSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -100,12 +98,11 @@ public class MyAdapter extends CursorAdapter {
                 if (b) {
                     db.turnOnAlarm(id);
                     Toast.makeText(context, "Đã kích hoạt báo thức", Toast.LENGTH_SHORT).show();
-                    //notifyDataSetChanged();
                 } else {
                     db.turnOffAlarm(id);
                     Toast.makeText(context, "Đã tắt báo thức", Toast.LENGTH_SHORT).show();
-                    //notifyDataSetChanged();
                 }
+                //notifyDataSetChanged();
                 //Gọi function trong MainActivity để load lại cursor và Listview
                 if (context instanceof MainActivity){
                     ((MainActivity)context).notifyRefresh();
