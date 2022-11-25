@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:hint="@string/message_hint"
+        android:ems="15"
         android:importantForAutofill="no"
         android:inputType="text"
         app:layout_constraintTop_toTopOf="parent"
@@ -53,6 +54,5 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintGuide_percent="0.5"/>
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

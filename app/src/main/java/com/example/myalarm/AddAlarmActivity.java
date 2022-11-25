@@ -41,6 +41,7 @@ public class AddAlarmActivity extends AppCompatActivity implements View.OnClickL
         int id = Integer.parseInt(sId);
 
         db.addAlarm(id, sHour, sMin, message);
+        db.close();
 
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);

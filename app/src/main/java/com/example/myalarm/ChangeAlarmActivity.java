@@ -57,6 +57,7 @@ public class ChangeAlarmActivity extends AppCompatActivity implements View.OnCli
         } else {
             db.deleteAlarm(id);
         }
+        db.close();
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
     }

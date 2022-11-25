@@ -64,4 +64,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Cursor cursor = db.getAlarmList();
         adapter.changeCursor(cursor);
     }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        db.close();
+    }
 }

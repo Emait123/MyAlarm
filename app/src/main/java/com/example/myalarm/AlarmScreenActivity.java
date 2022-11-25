@@ -7,6 +7,7 @@ import android.app.KeyguardManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -52,6 +53,15 @@ public class AlarmScreenActivity extends AppCompatActivity implements View.OnCli
         TextView mes = findViewById(R.id.alarmMes);
         mes.setText(message);
 
+        AlarmHelper db = new AlarmHelper(this);
+        Cursor cursor = db.getAlarm(id);
+        cursor.moveToFirst();
+        String sHour = cursor.getString(cursor.getColumnIndexOrThrow("hour"));
+        String sMinute = cursor.getString(cursor.getColumnIndexOrThrow("minute"));
+        String alarmTime = sHour + ":" + sMinute;
+        time.setText(alarmTime);
+        db.close();
+
         //btn.setOnClickListener(this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
@@ -67,7 +77,7 @@ public class AlarmScreenActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View view) {
         String idText = Integer.toString(id);
-        Log.e("lastId", idText);
+        Log.e("Cancel alarm:", idText);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, MyReceiver.class);

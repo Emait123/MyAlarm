@@ -12,7 +12,7 @@ public class MyReceiver extends BroadcastReceiver {
         String mes = intent.getStringExtra("mes");
         if (id != -1) {
             String idText = Integer.toString(id);
-            Log.e("Id", idText);
+            Log.e("Start alarm:", idText);
 
             Intent alarm = new Intent(context, AlarmScreenActivity.class);
             alarm.putExtra("id", id);
